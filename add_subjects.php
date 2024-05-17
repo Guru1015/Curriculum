@@ -266,5 +266,7 @@ if(isset($_POST['delete_subject'])) {
             ?>
         </div>
     </div>
+
+    
 </body>
 </html>
