@@ -39,7 +39,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
     // Implode the objectives array to a string
     $objectives = implode("$\n", $objectives);
 
-
     // Handle outcomes
     $outcomes = [];
     if (isset($_POST['co']) && isset($_POST['description']) && isset($_POST['uup'])) {
@@ -54,19 +53,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
     }
     $outcomes = implode("$\n", $outcomes);
 
-    // Handle course content
-    $course_content = [];
-    if (isset($_POST['module_no']) && isset($_POST['content_description']) && isset($_POST['time'])) {
+    // Handle lab components
+    $lab_components = [];
+    if (isset($_POST['module_no']) && isset($_POST['lab_components']) && isset($_POST['co_mapping']) && isset($_POST['rbt'])) {
         $module_nos = $_POST['module_no'];
-        $descriptions = $_POST['content_description'];
-        $times = $_POST['time'];
+        $descriptions = $_POST['lab_components']; // Change here
+        $co_mappings = $_POST['co_mapping'];
+        $rbts = $_POST['rbt'];
         foreach ($module_nos as $index => $module_no) {
-            if (!empty($module_no) && !empty($descriptions[$index]) && !empty($times[$index])) {
-                $course_content[] = $module_no . '|' . $descriptions[$index] . '|' . $times[$index];
+            if (!empty($module_no) && !empty($descriptions[$index]) && !empty($co_mappings[$index]) && !empty($rbts[$index])) {
+                $lab_components[] = $module_no . '|' . $descriptions[$index] . '|' . $co_mappings[$index] . '|' . $rbts[$index];
             }
         }
     }
-    $course_content = implode("$\n", $course_content);
+    $lab_components = implode("$\n", $lab_components);
 
     // Handle textbooks
     $textbooks = [];
@@ -121,9 +121,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
     $onlinereferences = implode("$\n", $onlinereferences); // Separate rows by new line
 
     // Update the database using prepared statements
-    $stmt = $conn->prepare("UPDATE subjects SET course_title = ?, prerequisites = ?, objectives = ?, outcomes = ?, course_content = ?, textbook = ?, referencebook = ?, webreferences = ?, onlinereferences = ?, ltpc = ? WHERE name = ? AND course_code = ?");
-    $stmt->bind_param("ssssssssssss", $course_title, $prerequisites, $objectives, $outcomes, $course_content, $textbooks, $referencebooks, $webreferences, $onlinereferences, $ltpc, $subject_name, $course_code);
-
+    $stmt = $conn->prepare("UPDATE subjects SET course_title = ?, prerequisites = ?, objectives = ?, outcomes = ?, lab_components = ?, textbook = ?, referencebook = ?, webreferences = ?, onlinereferences = ?, ltpc = ? WHERE name = ? AND course_code = ?");
+    $stmt->bind_param("ssssssssssss", $course_title, $prerequisites, $objectives, $outcomes, $lab_components, $textbooks, $referencebooks, $webreferences, $onlinereferences, $ltpc, $subject_name, $course_code);
 
     if ($stmt->execute()) {
         echo '<script>alert("Record updated successfully");</script>';
@@ -138,21 +137,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Theory Page - SKCET</title>
-    <link rel="icon" href="15.png">
+    <title>Practical Page - SKASC</title>
+    <link rel="icon" href="New folder/5.png">
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color:#FFF8DC;
+            background-color: #FFF8DC;
         }
+
         .container {
             max-width: 800px;
             margin: 20px auto;
             padding: 20px;
-                                                                                                                                                                                    
             background-color:#a0d2eb;
             border-radius: 8px;
             border: 1px solid #000; /* Black border */
@@ -235,8 +234,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
             transition: background-color 0.3s ease;
         }
 
-
-
         .btn-group {
             margin-bottom: 20px;
             text-align: center;
@@ -308,24 +305,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
             <button type="button" class="add-row-btn" onclick="addRow('outcomes_table')">Add Row</button>
             <button type="button" class="del-row-btn" onclick="delRow('outcomes_table')">Delete Row</button>
 
-            <label for="course_content"style="margin-top: 10px;">Course Content:</label>
+
+            <!-- Change the name attribute from course_content to lab_components -->
+            <label for="course_content" style="margin-top: 10px;">Lab Components:</label>
             <table id="content_table">
                 <tr>
-                    <th>Module No.</th>
-                    <th>Description</th>
-                    <th>Time</th>
-                </tr>   
+                    <th>S.No</th>
+                    <th>List of Experiments</th>
+                    <th>CO Mapping</th>
+                    <th>RBT</th>
+                </tr>
+                <!-- Initial row -->
                 <tr>
                     <td><textarea name="module_no[]" rows="1" required></textarea></td>
-                    <td><textarea name="content_description[]" rows="1" required></textarea></td>
-                    <td><textarea name="time[]" rows="1" required></textarea></td>
+                    <td><textarea name="lab_components[]" rows="1" required></textarea></td> <!-- Change here -->
+                    <td><textarea name="co_mapping[]" rows="1" required></textarea></td>
+                    <td><textarea name="rbt[]" rows="1" required></textarea></td>
                 </tr>
             </table>
             <button type="button" class="add-row-btn" onclick="addRow('content_table')">Add Row</button>
             <button type="button" class="del-row-btn" onclick="delRow('content_table')">Delete Row</button>
 
             <!-- Textbooks -->
-            <label for="textbook"style="margin-top: 10px;">Text Book:</label>
+            <label for="textbook" style="margin-top: 10px;">Text Book:</label>
             <table id="textbook_table">
                 <tr>
                     <th>No</th>
@@ -341,13 +343,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
             <button type="button" class="del-row-btn" onclick="delRow('textbook_table')">Delete Row</button>
 
             <!-- Reference Books -->
-            <label for="referencebook"style="margin-top: 10px;">Reference Book:</label>
+            <label for="referencebook" style="margin-top: 10px;">Reference Book:</label>
             <table id="referencebook_table">
                 <tr>
                     <th>No</th>
                     <th>Description</th>
                 </tr>
-                <!-- Initial row -->
+                <!-- Initial row -->    
                 <tr>
                     <td><textarea name="referencebook_no[]" rows="1" required></textarea></td>
                     <td><textarea name="referencebook_description[]" rows="1" required></textarea></td>
@@ -357,7 +359,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
             <button type="button" class="del-row-btn" onclick="delRow('referencebook_table')">Delete Row</button>
 
             <!-- Web References -->
-            <label for="webreferences"style="margin-top: 10px;">Web References:</label>
+            <label for="webreferences" style="margin-top: 10px;">Web References:</label>
             <table id="webreferences_table">
                 <tr>
                     <th>No</th>
@@ -373,7 +375,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
             <button type="button" class="del-row-btn" onclick="delRow('webreferences_table')">Delete Row</button>
 
             <!-- Online References -->
-            <label for="onlinereferences"style="margin-top: 10px;">Online References:</label>
+            <label for="onlinereferences" style="margin-top: 10px;">Online References:</label>
             <table id="onlinereferences_table">
                 <tr>
                     <th>No</th>
@@ -387,84 +389,84 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
             </table>
             <button type="button" class="add-row-btn" onclick="addRow('onlinereferences_table')">Add Row</button>
             <button type="button" class="del-row-btn" onclick="delRow('onlinereferences_table')">Delete Row</button>
-                        
+
             <input type="submit" name="submit" class="save-btn" value="Save Details">
 
         </form>
     </div>
     <script>
-        function addRow(tableId) {
-            var table = document.getElementById(tableId);
-            var rowCount = table.rows.length;
-            var row = table.insertRow(rowCount);
+    function addRow(tableId) {
+        var table = document.getElementById(tableId);
+        var rowCount = table.rows.length;
+        var row = table.insertRow(rowCount);
 
-            // Add textarea fields based on table structure
-            switch (tableId) {
-                case 'objectives_table':
-                    // For Course Objectives table
-                    addTextarea(row, 'serial[]');
-                    addTextarea(row, 'objective[]');
-                    break;
-                case 'outcomes_table':
-                    // For Course Outcomes table
-                    addTextarea(row, 'co[]');
-                    addTextarea(row, 'description[]');
-                    addTextarea(row, 'uup[]');
-                    break;
-                case 'content_table':
-                    // For Course Content table
-                    addTextarea(row, 'module_no[]');
-                    addTextarea(row, 'content_description[]');
-                    addTextarea(row, 'time[]');
-                    break;
-                case 'textbook_table':
-                    // For Textbook table
-                    addTextarea(row, 'textbook_no[]');
-                    addTextarea(row, 'textbook_description[]');
-                    break;
-                case 'referencebook_table':
-                    // For Reference Book table
-                    addTextarea(row, 'referencebook_no[]');
-                    addTextarea(row, 'referencebook_description[]');
-                    break;
-                case 'webreferences_table':
-                    // For Web References table
-                    addTextarea(row, 'webreferences_no[]');
-                    addTextarea(row, 'webreferences_description[]');
-                    break;
-                case 'onlinereferences_table':
-                    // For Online References table
-                    addTextarea(row, 'onlinereferences_no[]');
-                    addTextarea(row, 'onlinereferences_description[]');
-                    break;
-                // Add cases for other tables if needed
-                default:
-                    break;
-            }
-            
+        // Add textarea fields based on table structure
+        switch (tableId) {
+            case 'objectives_table':
+                // For Course Objectives table
+                addTextarea(row, 'serial[]');
+                addTextarea(row, 'objective[]');
+                break;
+            case 'outcomes_table':
+                // For Course Outcomes table
+                addTextarea(row, 'co[]');
+                addTextarea(row, 'description[]');
+                addTextarea(row, 'uup[]');
+                break;
+            case 'content_table':
+                // For Course Content table
+                addTextarea(row, 'module_no[]');
+                addTextarea(row, 'lab_components[]'); // Change here
+                addTextarea(row, 'co_mapping[]');
+                addTextarea(row, 'rbt[]');
+                break;
+            case 'textbook_table':
+                // For Textbook table
+                addTextarea(row, 'textbook_no[]');
+                addTextarea(row, 'textbook_description[]');
+                break;
+            case 'referencebook_table':
+                // For Reference Book table
+                addTextarea(row, 'referencebook_no[]');
+                addTextarea(row, 'referencebook_description[]');
+                break;
+            case 'webreferences_table':
+                // For Web References table
+                addTextarea(row, 'webreferences_no[]');
+                addTextarea(row, 'webreferences_description[]');
+                break;
+            case 'onlinereferences_table':
+                // For Online References table
+                addTextarea(row, 'onlinereferences_no[]');
+                addTextarea(row, 'onlinereferences_description[]');
+                break;
+            // Add cases for other tables if needed
+            default:
+                break;
         }
         
-        // Function to add textarea fields to a table row
-        function addTextarea(row, name) {
-            var cell = row.insertCell();
-            var textarea = document.createElement('textarea');
-            textarea.name = name;
-            textarea.rows = "1"; // Set the number of rows
-            cell.appendChild(textarea);
-        }
+    }
+    
+    // Function to add textarea fields to a table row
+    function addTextarea(row, name) {
+        var cell = row.insertCell();
+        var textarea = document.createElement('textarea');
+        textarea.name = name;
+        textarea.rows = "1"; // Set the number of rows
+        cell.appendChild(textarea);
+    }
 
-        // Function to delete the last row of a table
-        function delRow(tableId) {
-            var table = document.getElementById(tableId);
-            var rowCount = table.rows.length;
-            // Ensure that there's at least one row remaining
-            if (rowCount > 2) {
-                table.deleteRow(rowCount - 1);
-            } else {
-                alert("At least one row is required!");
-            }
+    // Function to delete the last row of a table
+    function delRow(tableId) {
+        var table = document.getElementById(tableId);
+        var rowCount = table.rows.length;
+        // Ensure that there's at least one row remaining
+        if (rowCount > 2) {
+            table.deleteRow(rowCount - 1);
+        } else {
+            alert("At least one row is required!");
         }
-    </script>
+    }
+</script>
 </body>
 </html>
-

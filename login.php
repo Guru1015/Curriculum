@@ -13,14 +13,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $domain = substr($staff_username, strpos($staff_username, '@') + 1);
 
         // Check if the domain part matches your desired domain and password is correct
-        if ($domain === "skasc.ac.in" && $staff_password === "password") {
+        if ($domain === "skcet.ac.in" && $staff_password === "password") {
             // Authentication successful, redirect to home page
             $_SESSION['staff_username'] = $staff_username;
             header("Location: home.php");
             exit;
         } else {
             // Authentication failed, set error message
-            $_SESSION['error_message'] = "Username or password is incorrect";
+            echo "<script>alert('Username or password is incorrect');</script>";
             header("Location: login.php");
             exit;
         }
@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $domain = substr($student_username, strpos($student_username, '@') + 1);
 
         // Check if the domain part matches your desired domain and password is correct
-        if ($domain === "skasc.ac.in" && $student_password === "password") {
+        if ($domain === "skcet.ac.in" && $student_password === "password") {
             // Authentication successful, redirect to student dashboard or wherever you want
             $_SESSION['student_username'] = $student_username;
             header("Location: student_dashboard.php");
@@ -55,8 +55,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title style="color: white;">SKASC - Login Page</title>
-<link rel="icon" href="New folder/5.png">
+<title style="color: white;">SKCET - Login Page</title>
+<link rel="icon" href="15.png">
 <style>
     body {
         background-color: rgba(255, 255, 255, 0.5);
@@ -75,6 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     .login-container {
+        border: 2px solid #000; /* Black border */
         background-color: aqua ;
         padding: 20px;
         border-radius: 8px;
@@ -189,4 +190,3 @@ function showLoginForm(userType) {
 
 </body>
 </html>
-

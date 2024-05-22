@@ -49,8 +49,8 @@ $conn->close();
 <!DOCTYPE html>
 <html>
 <head>
-    <title>SKASC - Edit PO: <?php echo $po["title"]; ?></title>
-    <link rel="icon" href="New folder/5.png">
+    <title>SKCET - Edit PO: <?php echo $po["title"]; ?></title>
+    <link rel="icon" href="15.png">
     <style>
         * {
             font-family: Arial, sans-serif;
@@ -67,8 +67,8 @@ $conn->close();
             max-width: 600px;
             padding: 20px;
             border-radius: 8px;
-            background-color: rgba(0, 0, 0, 0.35);   
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            background-color: #a0d2eb;
+            border: 1px solid #000; /* Black border */
         }
         h2 {
             margin-top: 0;
@@ -107,18 +107,19 @@ $conn->close();
         input[type="submit"]:hover {
             background-color: #45a049;
         }
+        
     </style>
 </head>
 <body>
     <?php include 'header4edit_po.php'; ?>
     <div class="container">
-        <h2>Edit PO: <?php echo $po["title"]; ?></h2>
+        <h2 style="color: #000;">Edit PO: <?php echo $po["title"]; ?></h2>
         <form action="" method="post">
             <input type="hidden" name="po_id" value="<?php echo $po_id; ?>">
             <input type="hidden" name="program_id" value="<?php echo $po['program_id']; ?>">
-            <label for="po_title">PO Title:</label>
+            <label style="color: #000;" for="po_title">PO Title:</label>
             <input type="text" id="po_title" name="po_title" value="<?php echo $po["title"]; ?>" required>
-            <label for="po_description">PO Description:</label>
+            <label style="color: #000;" for="po_description">PO Description:</label>
             <textarea id="po_description" name="po_description" rows="4" required><?php echo $po["description"]; ?></textarea>
             <input type="submit" name="update" value="Update PO">
         </form>

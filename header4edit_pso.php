@@ -13,14 +13,14 @@
             font-family: 'Poppins', sans-serif;
         }
         header {
-            background: #495057;
+       
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0 20px;
             border-radius: 10px;
-            background-color: rgba(0, 0, 0, 0.35);    
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            background-color: #a0d2eb;
+            border: 1px solid #000; /* Black border */
         }
         .Logo {
             color: rgb(44, 44, 44);
@@ -87,14 +87,20 @@
             color: white;
         }
         h3{
-            margin-left: -939px;
+            color: black;
+            margin-left: -870px;
+        }
+        @media (max-width: 1850px) {
+            header {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
     <header>
         <div class="Logo">
-            <img src="New folder/5.png" alt="Logo" style="max-width: 100px; margin-left:650px;" >
+            <img src="New folder/5.png" alt="Logo" style="max-width: 100px; margin-left:655px;" >
             <img src="New folder/3.png" alt="Logo" style="max-width: 100px; margin-left:350px;" >
         </div>
         <p class="Logo"></p>
@@ -102,9 +108,9 @@
         <input type="checkbox" name="" class="btn">
         <div class="nav">
             <ol>
-                <li><a href="home.php">Home</a></li>
-                <li><a href="#">⬅️ Previous</a></li>
-                <li><a href="#">➡️ Next</a></li>
+            <li><a href="home.php">Home</a></li>
+                <li><a href="https://skasc.ac.in/index.php/department">Departments</a></li>
+                <li><a href="https://skasc.ac.in/index.php/contactus">Contact us</a></li>
                 <li><a href="https://skasc.ac.in/index.php/aboutus">About</a></li>
             </ol>
         </div>

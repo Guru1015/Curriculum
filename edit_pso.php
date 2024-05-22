@@ -46,8 +46,8 @@ if(isset($_POST['pso_title']) && isset($_POST['pso_description'])) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>SKASC - Edit PSO: <?php echo $pso["title"]; ?></title>
-    <link rel="icon" href="New folder/5.png">
+    <title>SKCET - Edit PSO: <?php echo $pso["title"]; ?></title>
+    <link rel="icon" href="15.png">
     <style>
         * {
             font-family: Arial, sans-serif;
@@ -63,8 +63,8 @@ if(isset($_POST['pso_title']) && isset($_POST['pso_description'])) {
             max-width: 600px;
             padding: 20px;
             border-radius: 8px;
-            background-color: rgba(0, 0, 0, 0.35);
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            background-color: #a0d2eb;
+            border: 1px solid #000; /* Black border */
         }
         h2 {
             margin-top: 0;
@@ -108,13 +108,13 @@ if(isset($_POST['pso_title']) && isset($_POST['pso_description'])) {
 <body>
     <?php include 'header4edit_pso.php'; ?>
     <div class="container">
-        <h2>Edit PSO: <?php echo $pso["title"]; ?></h2>
+        <h2 style="color: #000;">Edit PSO: <?php echo $pso["title"]; ?></h2>
         <form action="" method="post">
             <input type="hidden" name="pso_id" value="<?php echo $pso_id; ?>">
             <input type="hidden" name="program_id" value="<?php echo $pso['program_id']; ?>">
-            <label for="pso_title">PSO Title:</label>
+            <label style="color: #000;" for="pso_title">PSO Title:</label>
             <input type="text" id="pso_title" name="pso_title" value="<?php echo $pso["title"]; ?>" required>
-            <label for="pso_description">PSO Description:</label>
+            <label style="color: #000;" for="pso_description">PSO Description:</label>
             <textarea id="pso_description" name="pso_description" rows="4" required><?php echo $pso["description"]; ?></textarea>
             <input type="submit" value="Update PSO">
         </form>

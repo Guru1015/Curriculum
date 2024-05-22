@@ -63,26 +63,29 @@ if(isset($_POST['pso_title']) && isset($_POST['pso_description'])) {
 }
 
 // Delete PO
-if(isset($_POST['delete_po_id'])) {
-    $delete_po_id = $_POST['delete_po_id'];
+// Delete PO
+if(isset($_GET['delete_po_id'])) {
+    $delete_po_id = $_GET['delete_po_id'];
     
     $sql_delete_po = "DELETE FROM po WHERE id = $delete_po_id";
     if ($conn->query($sql_delete_po) === TRUE) {
-        // Refresh the page to reflect the changes
-        header("Refresh:0");
+        // Redirect to the same page without the delete parameter in the URL
+        header("Location: {$_SERVER['PHP_SELF']}?id=$program_id");
+        exit;
     } else {
         echo "Error: " . $sql_delete_po . "<br>" . $conn->error;
     }
 }
 
 // Delete PSO
-if(isset($_POST['delete_pso_id'])) {
-    $delete_pso_id = $_POST['delete_pso_id'];
+if(isset($_GET['delete_pso_id'])) {
+    $delete_pso_id = $_GET['delete_pso_id'];
     
     $sql_delete_pso = "DELETE FROM pso WHERE id = $delete_pso_id";
     if ($conn->query($sql_delete_pso) === TRUE) {
-        // Refresh the page to reflect the changes
-        header("Refresh:0");
+        // Redirect to the same page without the delete parameter in the URL
+        header("Location: {$_SERVER['PHP_SELF']}?id=$program_id");
+        exit;
     } else {
         echo "Error: " . $sql_delete_pso . "<br>" . $conn->error;
     }
@@ -92,13 +95,17 @@ if(isset($_POST['delete_pso_id'])) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>SKASC - <?php echo $program["name"]; ?></title>
-    <link rel="icon" href="New folder/5.png">
+    <title>SKCET - <?php echo $program["name"]; ?></title>
+    <link rel="icon" href="15.png">
     <style>
         * {
             margin-top: -7px;
             font-family: Arial, sans-serif;
             padding: 20px;
+            
+        }
+        html{
+            background-color: #FFF8DC;
         }
         .container {
             margin-left: 29%;
@@ -108,20 +115,21 @@ if(isset($_POST['delete_pso_id'])) {
             background: #fff;
             padding: 20px;
             border-radius: 8px;
-            background-color: #495057;
-            background-color: rgba(0, 0, 0, 0.35);    
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            background-color: #a0d2eb;
+            border: 1px solid #000; /* Black border */
         }
         h1, h2 {
-            color:#fff;
+            color:black;
             text-align: center;
+            margin-bottom:10px;
+            margin-top:10px;
         }
         form {
             margin-bottom: 20px;
         }
         label {
             font-weight: bold;
-            color: #fff;
+            color: black;
         }
         input[type="text"],
         textarea {
@@ -143,17 +151,16 @@ if(isset($_POST['delete_pso_id'])) {
         input[type="submit"]:hover {
             background-color: #45a049;
         }
-        ul {
-            list-style-type: none;
-            padding: 0;
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
-        ul li {
-            margin-bottom: 10px;
-            color: #fff;
+        table, th, td {
+            border: 1px solid black;
         }
-        ul li strong {
-            font-weight: bold;
-            color: #333;
+        th, td {
+            padding: 8px;
+            text-align: left;
         }
 
         /* Media Query for Responsive Layout */
@@ -184,7 +191,7 @@ if(isset($_POST['delete_pso_id'])) {
             <input type="text" id="po_title" name="po_title" required><br>
             <label for="po_description">PO Description:</label><br>
             <textarea id="po_description" name="po_description" required></textarea><br>
-            <input type="submit" value="Add PO" >
+            <input type="submit" value="Add PO">
         </form>
 
         <h2>Add New Program Specific Outcome (PSO)</h2>
@@ -202,34 +209,44 @@ if(isset($_POST['delete_pso_id'])) {
             <input type="submit" value="Sem/Batch Selection">
         </form>
 
-
         <hr>
-        <h1 style="margin-top: 10px;">Stored PO & PSO for <?php echo $program["name"]; ?></h1>
-        <h2 style="margin-top: 10px;">Program Outcomes (POs)</h2>
-        <ul>
+        <h1 style="margin-bottom: 10px;">Stored PO & PSO for <?php echo $program["name"]; ?></h1>
+        <h2 style="text-align:left;">Program Outcomes (POs)</h2>
+        <table>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Action</th>
+            </tr>
             <?php
             if ($result_po->num_rows > 0) {
                 while($row = $result_po->fetch_assoc()) {
-                    echo "<li><strong>" . $row["title"] . ":</strong> " . $row["description"] . " <a href='edit_po.php?id=" . $row["id"] . "'>Edit</a> <form style='display:inline' action='' method='post'><input type='hidden' name='delete_po_id' value='" . $row["id"] . "'><input type='submit' value='Delete'></form></li>";
+                    echo "<tr><td><strong>" . $row["title"] . ":</strong></td><td>" . $row["description"] . "</td><td><a href='edit_po.php?id=" . $row["id"] . "'>Edit</a> | <a href='?id=$program_id&delete_po_id=" . $row["id"] . "'>Delete</a></td></tr>";
                 }
             } else {
-                echo "<li>No POs found for this program</li>";
+                echo "<tr><td colspan='3'>No POs found for this program</td></tr>";
             }
             ?>
-        </ul>
+        </table>
 
-        <h2 style="margin-top: 10px;">Program Specific Outcomes (PSOs)</h2>
-        <ul>
+        <h2 style="text-align:left;">Program Specific Outcomes (PSOs)</h2>
+        <table>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Action</th>
+            </tr>
             <?php
             if ($result_pso->num_rows > 0) {
                 while($row = $result_pso->fetch_assoc()) {
-                    echo "<li><strong>" . $row["title"] . ":</strong> " . $row["description"] . " <a href='edit_pso.php?id=" . $row["id"] . "'>Edit</a> <form style='display:inline' action='' method='post'><input type='hidden' name='delete_pso_id' value='" . $row["id"] . "'><input type='submit' value='Delete'></form></li>";
+                    echo "<tr><td><strong>" . $row["title"] . ":</strong></td><td>" . $row["description"] . "</td><td><a href='edit_pso.php?id=" . $row["id"] . "'>Edit</a> | <a href='?id=$program_id&delete_pso_id=" . $row["id"] . "'>Delete</a></td></tr>";
                 }
             } else {
-                echo "<li>No PSOs found for this program</li>";
+                echo "<tr><td colspan='3'>No PSOs found for this program</td></tr>";
             }
             ?>
-        </ul>
+        </table>
     </div>
 </body>
 </html>
+

@@ -13,14 +13,13 @@
             font-family: 'Poppins', sans-serif;
         }
         header {
-            background: #495057;
+            background-color: #a0d2eb;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0 20px;
             border-radius: 10px;
-            background-color: rgba(0, 0, 0, 0.35);    
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            border: 1px solid #000; /* Black border */
         }
         .Logo {
             color: rgb(44, 44, 44);
@@ -87,27 +86,31 @@
             color: white;
         }
         h3{
-            margin-left: -890px;
+            font-size: 20px;
+            margin-left: -1200px;
+            font-weight: bold;
+        }
+        @media (max-width: 1850px) {
+            header {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
     <header>
         <div class="Logo">
-            <img src="New folder/5.png" alt="Logo" style="max-width: 100px; margin-left:350px;" >
-            <img src="New folder/3.png" alt="Logo" style="max-width: 100px; margin-left:350px;" >
+            <img src="New folder/5.png" alt="Logo" style="max-width: 100px; margin-left:565px;" >
         </div>
+        <img class="logo2" src="15.png" alt="Logo" style="max-width: 100px; margin-left:240px;" >
         <p class="Logo"></p>
-        <h3>Sri Krishna Arts and Science College <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;An Autonomous Institution <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Coimbatore</h3>
+        <h3>Sri Krishna College of Engineering and Technology <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;An Autonomous Institution <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Coimbatore</h3>
         <input type="checkbox" name="" class="btn">
         <div class="nav">
             <ol>
                 <li><a href="home.php">Home</a></li>
-                <li><a href="home.php">⬅️ Previous</a></li>
-                <li><a href="#">➡️ Next</a></li>
-                <li><a href="https://skasc.ac.in/index.php/aboutus">About</a></li>
-                <li><a href="https://skasc.ac.in/index.php/contactus">Contact</a></li>
-                <li><a href="https://skasc.ac.in/index.php/chairperson">Management</a></li>
+                <li><a href="https://skcet.ac.in/">Contact us</a></li>
+                <li><a href="https://skcet.ac.in/about-us/institution/">About</a></li>
             </ol>
         </div>
     </header>

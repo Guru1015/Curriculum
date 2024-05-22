@@ -56,7 +56,7 @@ if(isset($_POST['semester']) && isset($_POST['batch'])) {
         if ($conn->query($sql_subject) === TRUE) {
             echo '<script>alert("Subject \'' . $subject . '\' added successfully for Semester ' . $selected_semester . ' and Batch ' . $selected_batch . '");</script>';
         } else {
-            echo "Error: " . $sql_subject . "<br>" . $conn->error;
+            echo "<script>alert('Course Code is invalid');</script>";
         }
     }
 }
@@ -82,72 +82,72 @@ if(isset($_POST['delete_subject'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SKASC - Add Subjects</title>
-    <link rel="icon" href="New folder/5.png">
+    <title>SKCET - Add Subjects</title>
+    <link rel="icon" href="15.png">
     <link rel="stylesheet" href="styles.css">
-    <style>    
-        /* Global styles */
+    <style>
         * {
+            box-sizing: border-box;
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
         }
-        .container {      
-            max-width: 1100px;
+        html{
+            background-color: #FFF8DC;
+        }
+        .container {
+            max-width: 1200px;
             margin: 20px auto;
             padding: 20px;
-            background-color: rgba(0, 0, 0, 0.35);    
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            background-color: #a0d2eb;
+            border: 1px solid #000; /* Black border */
         }
         h1 {
-            color: #333;
+            background-color:#a0d2eb;
         }
         .subject-list {
             background-color: #fff;
             border-radius: 8px;
             padding: 20px;
             margin-top: 20px;
+            background-color: #a0d2eb;
+            border: 1px solid #000; /* Black border */
         }
         .subject-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-top: 6px;
+            
         }
         .subject-details {
             flex: 1;
+            
         }
-        .delete-btn-container {
-            width: 120px; /* Fixed width for the delete button container */
-        }
-        .delete-btn {
+        .delete-btn,
+        .view-btn,
+        .add-btn {
             background-color: red;
             color: white;
             border: none;
             border-radius: 4px;
-            cursor: pointer;    
-            padding: 5px 10px;  
-            width: 70%; /* Make the delete button fill the container */
-            text-align: center; /* Center the text */
+            cursor: pointer;
+            padding: 5px 10px;
+            text-align: center;
+        }
+        .view-btn {
+            background-color: green;
         }
         .add-btn {
             background-color: blue;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;    
-            padding: 5px 10px;  
-            width: 100px; /* Fixed width for the "Add Details" button */
-            text-align: center; /* Center the text */
         }
 
-        /* Form styles */
         .form {
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
+            background-color:#a0d2eb;
             margin-top: 20px;
+            border: 1px solid #000; /* Black border */
         }
         .form label {
             display: block;
@@ -174,10 +174,23 @@ if(isset($_POST['delete_subject'])) {
             font-size: 16px;
             transition: background-color 0.3s;
         }
+        .view-btn {
+        display: inline-block;
+        padding: 5px 10px;
+        background-color: #007bff; /* Button color */
+        color: #fff; /* Text color */
+        text-decoration: none; /* Remove underline */
+        border: none;
+        border-radius: 4px;
+        margin-left: 10px;
+        margin-right: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        }
     </style>
 </head>
 <body>
-    <?php include 'header4add_subjects.php'; ?>
+<?php include 'header4addsubjects.php'; ?>
     <div class="container">
         <div class="header">
             <!-- Display the header tag -->
@@ -236,6 +249,7 @@ if(isset($_POST['delete_subject'])) {
                     echo '<span>' . $row["name"] . '  |  Semester ' . $row["semester"] . '  |  Batch ' . $row["batch"] . '</span>';
                     echo '<span>   |  Course Code :  ' . $row["course_code"] . ' |  Nature of Course: ' . $row["nature_of_course"] . '</span>'; // Display course code and nature of course
                     echo '</div>';
+                    
                     // Add delete button for each subject
                     echo '<div class="delete-btn-container">';
                     echo '<form action="' . $_SERVER['REQUEST_URI'] . '" method="post">';
@@ -243,14 +257,30 @@ if(isset($_POST['delete_subject'])) {
                     echo '<input type="submit" value="Delete" class="delete-btn">';
                     echo '</form>';
                     echo '</div>';
-                    
+
+                    // Display view button for each subject
+                    // Display view button for each subject
+                    echo '<form action="' . ($row["nature_of_course"] == "theory" ? "theoryview.php" : ($row["nature_of_course"] == "practical" ? "practicalview.php" : "theory_practicalview.php")) . '" method="GET">';
+                    echo '<input type="hidden" name="subject_name" value="' . $row["name"] . '">';
+                    echo '<input type="hidden" name="course_code" value="' . $row["course_code"] . '">';
+                    echo '<button type="submit" class="view-btn">View</button>';
+                    echo '</form>';
+
+
                     // Modify form action dynamically based on the nature of the course
                     if ($row["nature_of_course"] == "theory") {
                         $form_action = "theory.php?subject_name=" . urlencode($row["name"]) . "&course_code=" . urlencode($row["course_code"]);
-                    } else {
-                        // If the nature of the course is not theory, keep the original action
+                    } elseif ($row["nature_of_course"] == "practical") {
+                        $form_action = "practical.php?subject_name=" . urlencode($row["name"]) . "&course_code=" . urlencode($row["course_code"]);
+                    }
+                    elseif ($row["nature_of_course"] == "theory_practical") {
+                        $form_action = "theory_practical.php?subject_name=" . urlencode($row["name"]) . "&course_code=" . urlencode($row["course_code"]);
+                    }
+                     else {    
+                        // If the nature of the course is not theory or practical, keep the original action
                         $form_action = $_SERVER['REQUEST_URI'];
                     }
+                    echo '<div class="add-details-btn-container">';
                     echo '<form action="' . $form_action . '" method="post">';
                     echo '<input type="hidden" name="subject_id" value="' . $row["id"] . '">'; // Pass subject_id
                     echo '<input type="hidden" name="subject_name" value="' . $row["name"] . '">'; // Pass subject_name
@@ -259,14 +289,13 @@ if(isset($_POST['delete_subject'])) {
                     echo '</form>';
                     echo '</div>';
                     
+                    echo '</div>'; // End of subject-item
                 }
             } else {
                 echo '<div class="subject-item">No subjects added yet.</div>';
             }
-            ?>
+?>
         </div>
     </div>
-
-    
 </body>
 </html>
